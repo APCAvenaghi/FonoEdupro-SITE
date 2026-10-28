@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FonoEdu PRO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== TELA DE AUTENTICAÇÃO ===== -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">🎓 FonoEdu PRO</div>
+      <p class="auth-subtitle">Gestão para fonoaudiólogos educacionais</p>
+
+      <!-- Login -->
+      <form id="login-form" class="auth-form">
+        <h2>Entrar</h2>
+        <label>E-mail
+          <input type="email" id="login-email" placeholder="seu@email.com" required>
+        </label>
+        <label>Senha
+          <input type="password" id="login-password" placeholder="Mínimo 4 caracteres" required>
+        </label>
+        <p id="login-error" class="form-error"></p>
+        <button type="submit" class="btn-primary">Entrar</button>
+        <p class="auth-switch">Não tem conta? <a href="#" id="show-register">Criar conta</a></p>
+        <div class="demo-box">
+          <strong>Acesso de demonstração</strong>
+          <span>demo@fonoedu.com · fono123</span>
+        </div>
+      </form>
+
+      <!-- Cadastro -->
+      <form id="register-form" class="auth-form hidden">
+        <h2>Criar conta</h2>
+        <label>Nome
+          <input type="text" id="reg-name" placeholder="Seu nome" required>
+        </label>
+        <label>E-mail
+          <input type="email" id="reg-email" placeholder="seu@email.com" required>
+        </label>
+        <label>Senha
+          <input type="password" id="reg-password" placeholder="Mínimo 4 caracteres" required>
+        </label>
+        <p id="register-error" class="form-error"></p>
+        <button type="submit" class="btn-primary">Criar conta e entrar</button>
+        <p class="auth-switch">Já tem conta? <a href="#" id="show-login">Fazer login</a></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== PAINEL INTERNO ===== -->
+  <div id="app-screen" class="app-screen hidden">
+    <aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><span class="logo-icon">🎓</span><span class="logo-text">FonoEdu PRO</span></div>
+    <button class="sidebar-toggle" id="sidebar-toggle" title="Recolher menu">☰</button>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="nav-item active" data-section="dashboard">🏠 <span class="nav-label">Inicial</span></button>
+    <button class="nav-item" data-section="pacientes">👥 <span class="nav-label">Pacientes</span></button>
+    <button class="nav-item" data-section="planejamento">🎯 <span class="nav-label">Planejamento</span></button>
+    <button class="nav-item" data-section="evolucoes">📝 <span class="nav-label">Evoluções</span></button>
+    <button class="nav-item" data-section="controle">📈 <span class="nav-label">Controle Mensal</span></button>
+    <button class="nav-item" data-section="listas">📚 <span class="nav-label">Listas</span></button>
+    <button class="nav-item" data-section="config">⚙️ <span class="nav-label">Configurações</span></button>
+  </nav>
+</aside>
+
+    <main class="main">
+      <header class="topbar">
+        <h1 id="section-title">Inicial</h1>
+        <div class="topbar-user">
+          <span id="user-name"></span>
+          <button id="logout-btn" class="btn-outline">Sair</button>
+        </div>
+      </header>
+
+      <!-- Dashboard -->
+      <section id="section-dashboard" class="section active">
+        <div class="cards-grid">
+          <div class="card stat-card">
+            <h3>👥 Pacientes ativos</h3>
+            <p class="stat-value" id="stat-pacientes">0</p>
+          </div>
+          <div class="card stat-card">
+            <h3>🎯 Metas em andamento</h3>
+            <p class="stat-value" id="stat-metas">0</p>
+          </div>
+          <div class="card stat-card">
+            <h3>📝 Evoluções registradas</h3>
+            <p class="stat-value" id="stat-evolucoes">0</p>
+          </div>
+          <div class="card stat-card">
+            <h3>📚 Listas de treino</h3>
+            <p class="stat-value" id="stat-listas">0</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Bem-vinda(o), <span id="welcome-name"></span> 👋</h3>
+          <p>Use o menu lateral para cadastrar pacientes, planejar o atendimento e registrar as evoluções.</p>
+        </div>
+      </section>
+
+      <!-- Pacientes -->
+      <section id="section-pacientes" class="section">
+        <div class="section-toolbar">
+          <div class="toolbar-filters">
+            <input type="text" id="paciente-search" class="input-search" placeholder="Buscar por nome...">
+            <select id="paciente-filtro-diagnostico" class="input-select">
+              <option value="">Todos os transtornos</option>
+              <option>Transtorno do Desenvolvimento da Fluência da Fala</option>
+              <option>Transtorno do Desenvolvimento da Linguagem</option>
+              <option>Transtorno do Espectro Autista</option>
+              <option>Transtorno do Desenvolvimento da Aprendizagem</option>
+              <option>Transtorno do Déficit de Atenção e Hiperatividade</option>
+              <option>Transtorno de Oposição Desafiador</option>
+              <option>Fenda Lábio-Alveolar</option>
+            </select>
+          </div>
+          <button class="btn-primary" id="btn-novo-paciente" style="width:auto">+ Novo paciente</button>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Paciente</th>
+                  <th>Idade</th>
+                  <th>Sexo</th>
+                  <th>Hipótese Diagnóstica</th>
+                  <th>Escola</th>
+                  <th>Telefone</th>
+                  <th>Frequência</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="pacientes-tbody"></tbody>
+            </table>
+            <p id="pacientes-empty" class="empty-state hidden">Nenhum paciente cadastrado ainda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Planejamento Terapêutico -->
+      <section id="section-planejamento" class="section">
+        <div class="section-toolbar">
+          <div class="toolbar-filters">
+            <input type="text" id="planejamento-search" class="input-search" placeholder="Buscar por paciente ou objetivo...">
+            <select id="planejamento-filtro-transtorno" class="input-select">
+              <option value="">Todos os transtornos</option>
+              <option>Transtorno do Desenvolvimento da Fluência da Fala</option>
+              <option>Transtorno do Desenvolvimento da Linguagem</option>
+              <option>Transtorno do Espectro Autista</option>
+              <option>Transtorno do Desenvolvimento da Aprendizagem</option>
+              <option>Transtorno do Déficit de Atenção e Hiperatividade</option>
+              <option>Transtorno de Oposição Desafiador</option>
+              <option>Fenda Lábio-Alveolar</option>
+            </select>
+          </div>
+          <button class="btn-primary" id="btn-novo-planejamento" style="width:auto">+ Novo planejamento</button>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Paciente</th>
+                  <th>Objetivo Geral</th>
+                  <th>Transtorno</th>
+                  <th>Nível</th>
+                  <th>Status</th>
+                  <th>Frequência</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="planejamentos-tbody"></tbody>
+            </table>
+            <p id="planejamentos-empty" class="empty-state hidden">Nenhum planejamento cadastrado ainda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Evoluções -->
+      <section id="section-evolucoes" class="section">
+        <div class="section-toolbar">
+          <div class="toolbar-filters">
+            <input type="text" id="evolucao-search" class="input-search" placeholder="Buscar por paciente ou observação...">
+            <select id="evolucao-filtro-paciente" class="input-select">
+              <option value="">Todos os pacientes</option>
+            </select>
+          </div>
+          <button class="btn-primary" id="btn-novo-evolucao" style="width:auto">+ Nova evolução</button>
+        </div>
+        <div class="card">
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Paciente</th>
+                  <th>Diagnóstico</th>
+                  <th>Sessão</th>
+                  <th>Presença</th>
+                  <th>Objetivos</th>
+                  <th>Estratégias Terapêuticas</th>
+                  <th>Resposta</th>
+                  <th>Nível de Ajuda</th>
+                  <th>Observações</th>
+                  <th>Evolução gerada</th>
+                  <th>ID Planejamento</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="evolucoes-tbody"></tbody>
+            </table>
+            <p id="evolucoes-empty" class="empty-state hidden">Nenhuma evolução registrada ainda.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Controle Evolutivo Mensal -->
+    <section id="section-controle" class="section">
+  <div class="section-toolbar">
+    <div class="toolbar-filters">
+      <select id="controle-paciente" class="input-select">
+        <option value="">Selecione o paciente...</option>
+      </select>
+      <input type="month" id="controle-mes" class="input-search">
+      <input type="text" id="controle-crfa" class="input-search" placeholder="CRFa (ex: 3-11438)">
+      <button class="btn-primary" id="btn-gerar-controle" style="width:auto">📄 Gerar relatório</button>
+      <button class="btn-outline" id="btn-imprimir-controle" style="width:auto">🖨️ Imprimir</button>
+    </div>
+  </div>
+  <div class="card">
+    <div id="controle-report" class="controle-report hidden"></div>
+    <p id="controle-empty" class="empty-state">Selecione um paciente e um mês para gerar o controle evolutivo mensal.</p>
+  </div>
+</section>
+
+      <!-- Listas -->
+<section id="section-listas" class="section">
+  <div class="section-toolbar">
+    <div class="toolbar-filters">
+      <input type="search" id="lista-search" class="input-search" placeholder="Buscar lista ou item...">
+      <select id="lista-filtro-categoria" class="input-select">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select id="lista-filtro-nivel" class="input-select">
+        <option value="">Todos os níveis</option>
+        <option>Fácil</option>
+        <option>Médio</option>
+        <option>Difícil</option>
+      </select>
+      <button class="btn-primary" id="btn-nova-lista" style="width:auto">+ Nova lista</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Lista</th>
+            <th>Categoria</th>
+            <th>Nível</th>
+            <th>Itens</th>
+            <th>Descrição</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="listas-tbody"></tbody>
+      </table>
+    </div>
+    <p id="listas-empty" class="empty-state hidden">Nenhuma lista encontrada.</p>
+  </div>
+</section>
+
+      <!-- Configurações -->
+<section id="section-config" class="section">
+  <div class="section-toolbar">
+    <div class="toolbar-filters">
+      <button class="btn-primary" id="btn-salvar-config" style="width:auto">💾 Salvar alterações</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="config-title">Dados da profissional</h3>
+    <p class="config-hint">Esses dados aparecem no cabeçalho e na assinatura dos relatórios mensais.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nome completo</label>
+        <input type="text" id="cfg-nome" placeholder="Ex: Mary Ellen Andrade Pedrosa">
+      </div>
+      <div class="form-group">
+        <label>CRFa</label>
+        <input type="text" id="cfg-crfa" placeholder="Ex: 3-11438">
+      </div>
+      <div class="form-group">
+        <label>Especialidade</label>
+        <input type="text" id="cfg-especialidade" placeholder="Ex: Fonoaudiologia Educacional">
+      </div>
+      <div class="form-group">
+        <label>E-mail profissional</label>
+        <input type="email" id="cfg-email" placeholder="email@exemplo.com">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="config-title">Consultório / Clínica</h3>
+    <p class="config-hint">Opcional — usado em documentos e cabeçalhos institucionais.</p>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nome da clínica</label>
+        <input type="text" id="cfg-clinica" placeholder="Ex: Clínica Fono Vida">
+      </div>
+      <div class="form-group">
+        <label>CNPJ</label>
+        <input type="text" id="cfg-cnpj" placeholder="00.000.000/0000-00">
+      </div>
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="tel" id="cfg-telefone" placeholder="(00) 0000-0000">
+      </div>
+      <div class="form-group">
+        <label>E-mail da clínica</label>
+        <input type="email" id="cfg-email-clinica" placeholder="contato@clinica.com">
+      </div>
+      <div class="form-group full">
+        <label>Endereço</label>
+        <input type="text" id="cfg-endereco" placeholder="Rua, número, bairro">
+      </div>
+      <div class="form-group">
+        <label>Cidade</label>
+        <input type="text" id="cfg-cidade" placeholder="Ex: Londrina">
+      </div>
+      <div class="form-group">
+        <label>UF</label>
+        <input type="text" id="cfg-uf" maxlength="2" placeholder="PR" style="text-transform:uppercase">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 class="config-title">Backup dos dados</h3>
+    <p class="config-hint">Exporte um arquivo com todos os pacientes, planejamentos e evoluções. Guarde em local seguro — é a única cópia fora do navegador.</p>
+    <div class="config-actions">
+      <button class="btn-outline" id="btn-exportar-dados">⬇️ Exportar backup (.json)</button>
+      <button class="btn-outline" id="btn-importar-dados">⬆️ Importar backup</button>
+      <input type="file" id="cfg-import-file" accept=".json,application/json" hidden>
+    </div>
+    <p class="config-hint" id="config-backup-info" style="margin-top:12px"></p>
+  </div>
+
+  <div class="card config-danger">
+    <h3 class="config-title">Zona de risco</h3>
+    <p class="config-hint">Apaga permanentemente todos os dados salvos neste navegador. Exporte um backup antes.</p>
+    <div class="config-actions">
+      <button class="btn-outline danger" id="btn-limpar-dados">Apagar todos os dados</button>
+    </div>
+  </div>
+</section>
+
+  <!-- ===== MODAL GENÉRICO (final do body) ===== -->
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Novo Paciente</h3>
+        <button class="modal-close" id="modal-close">×</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
